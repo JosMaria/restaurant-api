@@ -3,3 +3,10 @@
 !target/*-runner.jar
 !target/lib/*
 !target/quarkus-app/*
+
+.git
+.gitignore
+README.md
+.mvn/
+src/
+pom.xml
