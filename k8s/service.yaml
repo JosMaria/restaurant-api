@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: food-service
+  namespace: food-app
+  labels:
+    app: food-app
+spec:
+  selector:
+    app: food-app
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+    protocol: TCP
+  type: LoadBalancer
