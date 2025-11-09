@@ -18,6 +18,6 @@ public class Waiter {
     @Column(length = 100)
     private String lastname;
 
-    @Column(length = 10)
+    @Column(name = "phone_number", length = 10)
     private String phoneNumber;
 }
