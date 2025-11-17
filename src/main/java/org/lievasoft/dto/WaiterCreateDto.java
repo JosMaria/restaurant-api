@@ -1,4 +1,4 @@
-package org.lievasoft.service;
+package org.lievasoft.dto;
 
 public record WaiterCreateDto(
         String name,

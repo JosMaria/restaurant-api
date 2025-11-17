@@ -2,8 +2,10 @@ package org.lievasoft.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityExistsException;
+import org.lievasoft.dto.WaiterCreateDto;
 import org.lievasoft.dto.WaiterResponse;
 import org.lievasoft.entity.Waiter;
+import org.lievasoft.exception.PhoneNumberExistsException;
 import org.lievasoft.repository.WaiterRepository;
 
 @ApplicationScoped
@@ -16,15 +18,15 @@ public class WaiterService {
     }
 
     public WaiterResponse create(WaiterCreateDto payload) {
-        String phoneNumber = payload.phoneNumber();
-        boolean isRegistered = waiterRepository.isRegisteredNumber(phoneNumber);
+        var phoneNumber = payload.phoneNumber();
+        var isRegistered = waiterRepository.isRegisteredNumber(phoneNumber);
 
         if (!isRegistered) {
             var waiterToPersist = mapToWaiter(payload);
             waiterRepository.create(waiterToPersist);
             return mapToWaiterResponse(waiterToPersist);
 
-        } else throw new EntityExistsException("Phone number: %s already exists".formatted(phoneNumber));
+        } else throw new PhoneNumberExistsException(phoneNumber);
     }
 
     private Waiter mapToWaiter(WaiterCreateDto payload) {

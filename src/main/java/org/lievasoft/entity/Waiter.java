@@ -18,6 +18,7 @@ public class Waiter {
     @Column(length = 100)
     private String lastname;
 
+    //TODO: not null
     @Column(name = "phone_number", length = 10)
     private String phoneNumber;
 
