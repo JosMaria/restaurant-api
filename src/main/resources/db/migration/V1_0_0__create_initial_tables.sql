@@ -28,7 +28,7 @@ CREATE TABLE orders (
     ticket_id BIGINT NOT NULL,
     food_id BIGINT NOT NULL,
     quantity INTEGER NOT NULL,
-    toGo BOOLEAN NOT NULL,
+    toGo BOOLEAN NOT NULL DEFAULT FALSE,
     CONSTRAINT pk_orders PRIMARY KEY (id),
     CONSTRAINT fk_orders_food FOREIGN KEY (food_id) REFERENCES foods (id),
     CONSTRAINT fk_orders_ticket FOREIGN KEY (ticket_id) REFERENCES tickets (id)

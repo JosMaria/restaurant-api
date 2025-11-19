@@ -18,6 +18,6 @@ public class Order {
     @JoinColumn(nullable = false, name = "food_id")
     private Food food;
 
+    private boolean toGo = false;
     private int quantity;
-    private boolean toGo;
 }
