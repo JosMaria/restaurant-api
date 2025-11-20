@@ -19,8 +19,9 @@ public class TicketResource {
 
     @POST
     public Response create(TicketCreateDto payload) {
+        var ticketResponse = service.registerTicket(payload);
         return Response.created(URI.create("/api/v1/tickets"))
-                .entity(service.registerTicket(payload))
+                .entity(ticketResponse)
                 .build();
     }
 }
