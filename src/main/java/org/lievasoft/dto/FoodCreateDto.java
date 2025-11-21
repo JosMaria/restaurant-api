@@ -2,8 +2,7 @@ package org.lievasoft.dto;
 
 import org.lievasoft.enums.Proportion;
 
-public record FoodResponse(
-        long id,
+public record FoodCreateDto(
         String name,
         Proportion proportion,
         double price
