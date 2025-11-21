@@ -24,4 +24,28 @@ public class Food {
 
     @OneToMany(mappedBy = "food")
     private Set<Order> orders;
+
+    public Food() {}
+
+    public Food(String name, Proportion proportion, double price) {
+        this.name = name;
+        this.proportion = proportion;
+        this.price = price;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Proportion getProportion() {
+        return proportion;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
 }

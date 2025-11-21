@@ -1,11 +1,14 @@
 package org.lievasoft.resource;
 
-import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
+import org.lievasoft.dto.FoodCreateDto;
 import org.lievasoft.service.FoodService;
 
-@Path("/api/v1/food")
+import java.net.URI;
+
+@Path("/api/v1/foods")
 public class FoodResource {
 
     private final FoodService service;
@@ -14,9 +17,11 @@ public class FoodResource {
         this.service = service;
     }
 
-    @GET
-    public Response get() {
-        var payloadResponse = service.getFoods();
-        return Response.ok(payloadResponse).build();
+    @POST
+    public Response create(FoodCreateDto payload) {
+        var response = service.create(payload);
+        return Response.created(URI.create("/api/v1/foods"))
+                .entity(response)
+                .build();
     }
 }

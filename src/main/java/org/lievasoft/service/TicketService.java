@@ -15,6 +15,7 @@ public class TicketService {
     }
 
     public TicketResponse registerTicket(TicketCreateDto payload) {
+
         return null;
     }
 }
