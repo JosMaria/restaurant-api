@@ -48,4 +48,8 @@ public class Food {
     public Double getPrice() {
         return price;
     }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
 }
