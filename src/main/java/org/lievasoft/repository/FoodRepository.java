@@ -2,10 +2,10 @@ package org.lievasoft.repository;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.lievasoft.entity.Food;
 import org.lievasoft.enums.Proportion;
+import org.lievasoft.exception.FoodNotFoundException;
 
 import static io.quarkus.panache.common.Parameters.with;
 
@@ -22,8 +22,7 @@ public class FoodRepository implements PanacheRepository<Food> {
         int updateRows = update("price = :price WHERE id = :id",
                 with("price", price).and("id", foodId));
 
-        if (updateRows == 0)
-            throw new EntityNotFoundException("Food with id " + foodId + " not found");
+        if (updateRows == 0) throw new FoodNotFoundException(foodId);
 
         return findById(foodId);
     }

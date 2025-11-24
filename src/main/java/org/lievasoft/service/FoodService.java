@@ -18,7 +18,7 @@ public class FoodService {
     }
 
     public FoodResponse create(FoodCreateDto payload) {
-        if (!foodRepository.exists(payload.name(),  payload.proportion())) {
+        if (!foodRepository.exists(payload.name(), payload.proportion())) {
             var foodToPersist = mapToFood(payload);
             foodRepository.create(foodToPersist);
             return mapToFoodResponse(foodToPersist);
