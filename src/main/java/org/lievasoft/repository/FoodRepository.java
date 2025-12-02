@@ -6,15 +6,22 @@ import jakarta.transaction.Transactional;
 import org.lievasoft.entity.Food;
 import org.lievasoft.enums.Proportion;
 import org.lievasoft.exception.FoodNotFoundException;
+import org.lievasoft.metric.MetricService;
 
 import static io.quarkus.panache.common.Parameters.with;
 
 @ApplicationScoped
 public class FoodRepository implements PanacheRepository<Food> {
 
+    private final MetricService metric;
+
+    public FoodRepository(MetricService metric) {
+        this.metric = metric;
+    }
+
     @Transactional
     public void create(Food food) {
-        this.persist(food);
+        metric.measureInsert(() -> this.persist(food));
     }
 
     @Transactional
