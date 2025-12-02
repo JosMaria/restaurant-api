@@ -24,5 +24,4 @@ public class TicketResource {
                 .entity(ticketResponse)
                 .build();
     }
-
 }
