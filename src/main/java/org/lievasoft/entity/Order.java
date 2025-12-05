@@ -20,4 +20,13 @@ public class Order {
 
     private boolean toGo = false;
     private int quantity;
+
+    public Order(boolean toGo, int quantity) {
+        this.toGo = toGo;
+        this.quantity = quantity;
+    }
+
+    public void setTicket(Ticket ticket) {
+        this.ticket = ticket;
+    }
 }
