@@ -1,5 +1,6 @@
 package org.lievasoft.resource;
 
+import jakarta.validation.Valid;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
@@ -18,7 +19,7 @@ public class TicketResource {
     }
 
     @POST
-    public Response create(TicketCreateDto payload) {
+    public Response create(@Valid TicketCreateDto payload) {
         var ticketResponse = service.registerTicket(payload);
         return Response.created(URI.create("/api/v1/tickets"))
                 .entity(ticketResponse)
