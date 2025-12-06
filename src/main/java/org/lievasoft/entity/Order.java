@@ -18,12 +18,18 @@ public class Order {
     @JoinColumn(nullable = false, name = "food_id")
     private Food food;
 
-    private boolean toGo = false;
     private int quantity;
+    private boolean toGo = false;
 
-    public Order(boolean toGo, int quantity) {
-        this.toGo = toGo;
+    public Order() {}
+
+    public Order(int quantity, boolean toGo) {
         this.quantity = quantity;
+        this.toGo = toGo;
+    }
+
+    public void setFood(Food food) {
+        this.food = food;
     }
 
     public void setTicket(Ticket ticket) {

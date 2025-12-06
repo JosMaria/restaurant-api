@@ -1,18 +1,10 @@
 package org.lievasoft.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tickets")
@@ -28,19 +20,25 @@ public class Ticket {
     @JoinColumn(nullable = false)
     private Waiter waiter;
 
-    @OneToMany(mappedBy = "ticket")
-    private Set<Order> orders;
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.PERSIST)
+    private List<Order> orders = new ArrayList<>();
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    public Ticket() {}
+
+    public Ticket(Waiter waiter) {
+        this.waiter = waiter;
+    }
+
+    public void addOrders(List<Order> orders) {
+        this.orders.addAll(orders);
+        orders.forEach(order -> order.setTicket(this));
+    }
+
     @PrePersist
     private void onCreated() {
         createdAt = LocalDateTime.now();
-    }
-
-    private void addOrder(Order order) {
-        orders.add(order);
-        order.setTicket(this);
     }
 }

@@ -3,6 +3,7 @@ package org.lievasoft.entity;
 import jakarta.persistence.*;
 import org.lievasoft.enums.Proportion;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -23,7 +24,7 @@ public class Food {
     private Double price;
 
     @OneToMany(mappedBy = "food")
-    private Set<Order> orders;
+    private Set<Order> orders = new HashSet<>();
 
     public Food() {}
 
@@ -31,6 +32,11 @@ public class Food {
         this.name = name;
         this.proportion = proportion;
         this.price = price;
+    }
+
+    public void addOrder(Order order) {
+        orders.add(order);
+        order.setFood(this);
     }
 
     public Long getId() {
