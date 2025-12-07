@@ -2,7 +2,6 @@ package org.lievasoft.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import org.lievasoft.dto.TicketCreateDto;
 import org.lievasoft.dto.TicketResponse;
 import org.lievasoft.entity.Food;
@@ -33,27 +32,22 @@ public class TicketService {
         this.ticketRepository = ticketRepository;
     }
 
-    @Transactional
-    public TicketResponse registerTicket(TicketCreateDto payload) {
-        var orderCreateDtos = payload.orders();
-        if (!orderCreateDtos.isEmpty()) {
-            var obtainedWaiter = getWaiterOrElseThrow(payload.waiterId());
-            var ticket = new Ticket(obtainedWaiter);
-            List<Order> ordersToPersist = new ArrayList<>();
-            orderCreateDtos.forEach(orderCreateDto -> {
-                var obtainedFood = getFoodOrElseThrow(orderCreateDto.foodId());
-                var orderToPersist = new Order(orderCreateDto.quantity(), orderCreateDto.toGo());
-                orderToPersist.setFood(obtainedFood);
-                ordersToPersist.add(orderToPersist);
-            });
-            ticket.addOrders(ordersToPersist);
-            ticketRepository.persist(ticket);
-        }
-        //ticketProducer.publishTicketCreateDto(payload);
+    public TicketResponse registerTicketV2(TicketCreateDto payload) {
+        List<Order> ordersToPersist = new ArrayList<>();
+        payload.orders().forEach(orderCreateDto -> {
+            var obtainedFood = obtainFoodOrElseThrow(orderCreateDto.foodId());
+            var orderToPersist = new Order(obtainedFood, orderCreateDto.quantity(), orderCreateDto.toGo());
+            ordersToPersist.add(orderToPersist);
+        });
+
+        var obtainedWaiter = obtainWaiterOrElseThrow(payload.waiterId());
+        var ticketToPersist = new Ticket(obtainedWaiter);
+        ticketToPersist.addOrders(ordersToPersist);
+        ticketRepository.create(ticketToPersist);
         return null;
     }
 
-    private Waiter getWaiterOrElseThrow(long waiterId) {
+    private Waiter obtainWaiterOrElseThrow(long waiterId) {
         return waiterRepository.findByIdOptional(waiterId)
                 .orElseThrow(() -> {
                     String errorMsg = "Waiter with Id: %s does not exists.".formatted(waiterId);
@@ -61,7 +55,7 @@ public class TicketService {
                 });
     }
 
-    private Food getFoodOrElseThrow(long foodId) {
+    private Food obtainFoodOrElseThrow(long foodId) {
         return foodRepository.findByIdOptional(foodId)
                 .orElseThrow(() -> {
                     String errorMsg = "Food with Id: %s does not exists.".formatted(foodId);

@@ -1,7 +1,6 @@
 package org.lievasoft.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.persistence.EntityExistsException;
 import org.lievasoft.dto.WaiterCreateDto;
 import org.lievasoft.dto.WaiterResponse;
 import org.lievasoft.entity.Waiter;

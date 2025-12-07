@@ -21,7 +21,7 @@ public class Ticket {
     private Waiter waiter;
 
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.PERSIST)
-    private List<Order> orders = new ArrayList<>();
+    private final List<Order> orders = new ArrayList<>();
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

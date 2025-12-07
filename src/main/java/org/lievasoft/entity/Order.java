@@ -23,7 +23,8 @@ public class Order {
 
     public Order() {}
 
-    public Order(int quantity, boolean toGo) {
+    public Order(Food food, int quantity, boolean toGo) {
+        this.food = food;
         this.quantity = quantity;
         this.toGo = toGo;
     }
