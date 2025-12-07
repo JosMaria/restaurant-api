@@ -1,2 +1,0 @@
-ALTER TABLE tickets
-    ADD created_at TIMESTAMP WITHOUT TIME ZONE;

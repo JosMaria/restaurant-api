@@ -19,7 +19,9 @@ public class Order {
     private Food food;
 
     private int quantity;
-    private boolean toGo = false;
+
+    @Column(name = "to_go")
+    private boolean toGo;
 
     public Order() {}
 

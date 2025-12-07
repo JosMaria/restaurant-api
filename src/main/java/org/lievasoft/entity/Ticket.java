@@ -14,6 +14,7 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "is_paid")
     private boolean isPaid;
 
     @ManyToOne
