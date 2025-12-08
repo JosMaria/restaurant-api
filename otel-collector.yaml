@@ -1,0 +1,18 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 0.0.0.0:55681
+
+exporters:
+  debug:
+    verbosity: basic
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+    namespace: "restaurant"
+
+service:
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      exporters: [prometheus, debug]

@@ -1,6 +1,7 @@
 package org.lievasoft.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Event;
 import jakarta.persistence.EntityNotFoundException;
 import org.lievasoft.dto.TicketCreateDto;
 import org.lievasoft.dto.TicketResponse;
@@ -12,6 +13,7 @@ import org.lievasoft.kafka.producer.TicketProducer;
 import org.lievasoft.repository.FoodRepository;
 import org.lievasoft.repository.TicketRepository;
 import org.lievasoft.repository.WaiterRepository;
+import org.lievasoft.service.event.TicketCreatedEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +25,16 @@ public class TicketService {
     private final WaiterRepository waiterRepository;
     private final TicketRepository ticketRepository;
     private final TicketProducer ticketProducer;
+    private final Event<TicketCreatedEvent> ticketCreatedEvent;
 
     public TicketService(TicketProducer ticketProducer, WaiterRepository waiterRepository,
-                         FoodRepository foodRepository, TicketRepository ticketRepository) {
+                         FoodRepository foodRepository, TicketRepository ticketRepository,
+                         Event<TicketCreatedEvent> ticketCreatedEvent) {
         this.ticketProducer = ticketProducer;
         this.waiterRepository = waiterRepository;
         this.foodRepository = foodRepository;
         this.ticketRepository = ticketRepository;
+        this.ticketCreatedEvent = ticketCreatedEvent;
     }
 
     public TicketResponse registerTicketV2(TicketCreateDto payload) {
@@ -44,6 +49,7 @@ public class TicketService {
         var ticketToPersist = new Ticket(obtainedWaiter);
         ticketToPersist.addOrders(ordersToPersist);
         ticketRepository.create(ticketToPersist);
+        ticketCreatedEvent.fire(new TicketCreatedEvent(ticketToPersist));
         return null;
     }
 
