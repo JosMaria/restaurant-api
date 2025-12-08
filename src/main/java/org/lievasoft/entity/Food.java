@@ -7,7 +7,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "foods", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "proportion"})})
+@Table(
+        name = "foods",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "proportion"})}
+)
 public class Food {
 
     @Id
@@ -24,19 +27,15 @@ public class Food {
     private Double price;
 
     @OneToMany(mappedBy = "food")
-    private Set<Order> orders = new HashSet<>();
+    private final Set<Order> orders = new HashSet<>();
 
-    public Food() {}
+    public Food() {
+    }
 
     public Food(String name, Proportion proportion, double price) {
         this.name = name;
         this.proportion = proportion;
         this.price = price;
-    }
-
-    public void addOrder(Order order) {
-        orders.add(order);
-        order.setFood(this);
     }
 
     public Long getId() {
@@ -53,9 +52,5 @@ public class Food {
 
     public Double getPrice() {
         return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
     }
 }

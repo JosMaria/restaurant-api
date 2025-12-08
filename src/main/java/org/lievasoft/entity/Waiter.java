@@ -25,7 +25,8 @@ public class Waiter {
     @OneToMany(mappedBy = "waiter")
     private Set<Ticket> tickets;
 
-    public Waiter() {}
+    public Waiter() {
+    }
 
     public Waiter(String name, String lastname, String phoneNumber) {
         this.name = name;

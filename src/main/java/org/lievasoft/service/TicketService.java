@@ -47,6 +47,10 @@ public class TicketService {
         return null;
     }
 
+    public void changeIsPaid(long id, boolean isPaid) {
+        ticketRepository.updateIsPaid(id, isPaid);
+    }
+
     private Waiter obtainWaiterOrElseThrow(long waiterId) {
         return waiterRepository.findByIdOptional(waiterId)
                 .orElseThrow(() -> {

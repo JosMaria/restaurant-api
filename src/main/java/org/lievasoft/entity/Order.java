@@ -31,10 +31,6 @@ public class Order {
         this.toGo = toGo;
     }
 
-    public void setFood(Food food) {
-        this.food = food;
-    }
-
     public void setTicket(Ticket ticket) {
         this.ticket = ticket;
     }

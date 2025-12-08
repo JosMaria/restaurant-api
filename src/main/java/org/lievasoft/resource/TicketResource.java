@@ -1,9 +1,9 @@
 package org.lievasoft.resource;
 
 import jakarta.validation.Valid;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
+import org.jboss.resteasy.reactive.RestQuery;
 import org.lievasoft.dto.TicketCreateDto;
 import org.lievasoft.service.TicketService;
 
@@ -24,5 +24,12 @@ public class TicketResource {
         return Response.created(URI.create("/api/v1/tickets"))
                 .entity(ticketResponse)
                 .build();
+    }
+
+    @PATCH
+    @Path("/{id}/paid")
+    public Response changeIsPaid(@PathParam("id") Long id, @RestQuery boolean isPaid) {
+        service.changeIsPaid(id, isPaid);
+        return Response.ok().build();
     }
 }
