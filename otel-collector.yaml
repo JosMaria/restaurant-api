@@ -6,7 +6,7 @@ receivers:
 
 exporters:
   debug:
-    verbosity: basic
+    verbosity: verbosity
   prometheus:
     endpoint: "0.0.0.0:8889"
     namespace: "restaurant"

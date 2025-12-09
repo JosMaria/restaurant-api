@@ -19,7 +19,7 @@ public class TicketMetricObserver {
 
     @PostConstruct
     void init() {
-        totalTicketCounter = Counter.builder("restaurant.tickets.created")
+        totalTicketCounter = Counter.builder("tickets.created")
                 .description("Total tickets created")
                 .register(meterRegistry);
     }

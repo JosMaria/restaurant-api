@@ -14,6 +14,7 @@ import org.lievasoft.repository.FoodRepository;
 import org.lievasoft.repository.TicketRepository;
 import org.lievasoft.repository.WaiterRepository;
 import org.lievasoft.service.event.TicketCreatedEvent;
+import org.lievasoft.service.metric.CounterService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,30 +27,33 @@ public class TicketService {
     private final TicketRepository ticketRepository;
     private final TicketProducer ticketProducer;
     private final Event<TicketCreatedEvent> ticketCreatedEvent;
+    private final CounterService counterService;
 
     public TicketService(TicketProducer ticketProducer, WaiterRepository waiterRepository,
                          FoodRepository foodRepository, TicketRepository ticketRepository,
-                         Event<TicketCreatedEvent> ticketCreatedEvent) {
+                         Event<TicketCreatedEvent> ticketCreatedEvent, CounterService counterService) {
         this.ticketProducer = ticketProducer;
         this.waiterRepository = waiterRepository;
         this.foodRepository = foodRepository;
         this.ticketRepository = ticketRepository;
         this.ticketCreatedEvent = ticketCreatedEvent;
+        this.counterService = counterService;
     }
 
-    public TicketResponse registerTicketV2(TicketCreateDto payload) {
+    public TicketResponse registerTicket(TicketCreateDto payload) {
         List<Order> ordersToPersist = new ArrayList<>();
         payload.orders().forEach(orderCreateDto -> {
             var obtainedFood = obtainFoodOrElseThrow(orderCreateDto.foodId());
             var orderToPersist = new Order(obtainedFood, orderCreateDto.quantity(), orderCreateDto.toGo());
             ordersToPersist.add(orderToPersist);
+            counterService.incrementFood(obtainedFood.getName(), obtainedFood.getProportion(), orderCreateDto.quantity());
         });
 
         var obtainedWaiter = obtainWaiterOrElseThrow(payload.waiterId());
         var ticketToPersist = new Ticket(obtainedWaiter);
         ticketToPersist.addOrders(ordersToPersist);
         ticketRepository.create(ticketToPersist);
-        ticketCreatedEvent.fire(new TicketCreatedEvent(ticketToPersist));
+        counterService.incrementTicket();
         return null;
     }
 

@@ -20,7 +20,7 @@ public class TicketResource {
 
     @POST
     public Response create(@Valid TicketCreateDto payload) {
-        var ticketResponse = service.registerTicketV2(payload);
+        var ticketResponse = service.registerTicket(payload);
         return Response.created(URI.create("/api/v1/tickets"))
                 .entity(ticketResponse)
                 .build();
