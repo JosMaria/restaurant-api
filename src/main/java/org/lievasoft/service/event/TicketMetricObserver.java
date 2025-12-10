@@ -24,7 +24,7 @@ public class TicketMetricObserver {
                 .register(meterRegistry);
     }
 
-    public void onTicketCreated(@Observes TicketCreatedEvent event) {
-        totalTicketCounter.increment();
-    }
+//    public void onTicketCreated(@Observes TicketCreatedEvent event) {
+//        totalTicketCounter.increment();
+//    }
 }

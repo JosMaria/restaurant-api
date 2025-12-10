@@ -3,16 +3,25 @@ receivers:
     protocols:
       http:
         endpoint: 0.0.0.0:55681
+      grpc:
+        endpoint: 0.0.0.0:4317
 
 exporters:
   debug:
-    verbosity: verbosity
+    verbosity: detailed
   prometheus:
     endpoint: "0.0.0.0:8889"
     namespace: "restaurant"
+  otlp/jaeger:
+    endpoint: jaeger:4317
+    tls:
+      insecure: true
 
 service:
   pipelines:
     metrics:
       receivers: [otlp]
       exporters: [prometheus, debug]
+    traces:
+      receivers: [otlp]
+      exporters: [otlp/jaeger, debug]

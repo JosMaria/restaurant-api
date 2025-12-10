@@ -1,9 +1,10 @@
 services:
   otel-collector:
-    image: otel/opentelemetry-collector:latest
+    image: otel/opentelemetry-collector-contrib:latest
     container_name: otel-collector
     ports:
       - "55681:55681"
+      - "4317:4317"
       - "8889:8889"
     volumes:
       - ./otel-collector.yaml:/etc/otel-collector-config.yaml
@@ -26,9 +27,20 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_PASSWORD=maria17
     volumes:
       - grafana_data:/var/lib/grafana
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: jaeger
+    ports:
+      - "16686:16686"
+      - "9411:9411"
+      - "4319:4317"
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+      - COLLECTOR_ZIPKIN_HTTP_PORT=9411
 
 volumes:
   grafana_data:

@@ -29,7 +29,7 @@ public class TicketResource {
     @PATCH
     @Path("/{id}/paid")
     public Response changeIsPaid(@PathParam("id") Long id, @RestQuery boolean isPaid) {
-        service.changeIsPaid(id, isPaid);
+//        service.changeIsPaid(id, isPaid);
         return Response.ok().build();
     }
 }

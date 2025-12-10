@@ -24,6 +24,10 @@ public class FoodRepository implements PanacheRepository<Food> {
         metric.measureInsert(() -> this.persist(food));
     }
 
+    public boolean exists(long id) {
+        return find("id = :id", with("id", id)).count() > 0;
+    }
+
     @Transactional
     public Food updatePrice(long foodId, double price) {
         int updateRows = update("price = :price WHERE id = :id",

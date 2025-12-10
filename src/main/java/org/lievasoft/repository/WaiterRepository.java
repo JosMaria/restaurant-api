@@ -6,6 +6,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import org.lievasoft.entity.Waiter;
 
+import static io.quarkus.panache.common.Parameters.with;
+
 @ApplicationScoped
 public class WaiterRepository implements PanacheRepository<Waiter> {
 
@@ -14,10 +16,15 @@ public class WaiterRepository implements PanacheRepository<Waiter> {
         this.persist(waiter);
     }
 
+    public boolean exists(long id) {
+        return find("id = :id", with("id", id))
+                .count() > 0;
+    }
+
     public boolean isRegisteredNumber(String phoneNumber) {
         return find(
                 "phoneNumber = :number",
-                Parameters.with("number", phoneNumber)
+                with("number", phoneNumber)
         ).count() > 0;
     }
 }

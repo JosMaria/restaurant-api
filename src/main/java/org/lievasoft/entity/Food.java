@@ -1,10 +1,15 @@
 package org.lievasoft.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import org.lievasoft.enums.Proportion;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(
@@ -25,9 +30,6 @@ public class Food {
     private Proportion proportion;
 
     private Double price;
-
-    @OneToMany(mappedBy = "food")
-    private final Set<Order> orders = new HashSet<>();
 
     public Food() {
     }
