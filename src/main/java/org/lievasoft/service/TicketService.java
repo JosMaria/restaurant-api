@@ -2,14 +2,12 @@ package org.lievasoft.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityNotFoundException;
-import org.lievasoft.dto.OrderCreateDto;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.lievasoft.dto.TicketCreateDto;
 import org.lievasoft.dto.TicketCreateResponse;
 import org.lievasoft.entity.Waiter;
 import org.lievasoft.repository.FoodRepository;
 import org.lievasoft.repository.WaiterRepository;
-
-import java.util.List;
 
 @ApplicationScoped
 public class TicketService {
@@ -18,7 +16,8 @@ public class TicketService {
     private final WaiterRepository waiterRepository;
     private final FoodRepository foodRepository;
 
-    public TicketService(TicketServiceClient ticketServiceClient, WaiterRepository waiterRepository,
+    public TicketService(@RestClient TicketServiceClient ticketServiceClient,
+                         WaiterRepository waiterRepository,
                          FoodRepository foodRepository) {
         this.ticketServiceClient = ticketServiceClient;
         this.waiterRepository = waiterRepository;
@@ -30,14 +29,14 @@ public class TicketService {
 //    private final CounterService counterService;
 
     public TicketCreateResponse registerTicket(TicketCreateDto payload) {
-        List<OrderCreateDto> orderCreateDtos = payload.orders();
+        var orderCreateDtos = payload.orders();
         if (orderCreateDtos.isEmpty())
-            throw new IllegalArgumentException("Order empty nothing save.");
+            throw new IllegalArgumentException("Orders empty nothing for save.");
 
         boolean waiterExists = waiterRepository.exists(payload.waiterId());
         if (waiterExists) {
             boolean foodExists;
-            for (OrderCreateDto orderCreateDto : orderCreateDtos) {
+            for (var orderCreateDto : orderCreateDtos) {
                 foodExists = foodRepository.exists(orderCreateDto.foodId());
                 if (!foodExists) {
                     String errorMsg = "Food not found for ID: %s".formatted(orderCreateDto.foodId());
