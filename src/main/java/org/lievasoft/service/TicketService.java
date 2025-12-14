@@ -44,7 +44,11 @@ public class TicketService {
                 }
             }
 
-            ticketServiceClient.createTicket(payload);
+            try {
+                ticketServiceClient.createTicket(payload);
+            } catch (Exception exception) {
+                System.out.println(exception.getMessage());
+            }
         }
 
 //        List<Order> ordersToPersist = new ArrayList<>();
@@ -60,13 +64,12 @@ public class TicketService {
 //        ticketToPersist.addOrders(ordersToPersist);
 //        ticketRepository.create(ticketToPersist);
 //        counterService.incrementTicket();
-        return new TicketCreateResponse();
+        return null;
     }
 
 //    public void changeIsPaid(long id, boolean isPaid) {
 //        ticketRepository.updateIsPaid(id, isPaid);
 //    }
-
 
     private Waiter obtainWaiterOrElseThrow(long waiterId) {
 
