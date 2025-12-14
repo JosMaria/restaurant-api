@@ -2,7 +2,7 @@ package org.lievasoft.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import org.lievasoft.dto.FoodCreateDto;
-import org.lievasoft.dto.FoodResponse;
+import org.lievasoft.dto.FoodCreateResponse;
 import org.lievasoft.dto.PriceUpdateRequest;
 import org.lievasoft.entity.Food;
 import org.lievasoft.exception.FoodExistsException;
@@ -17,7 +17,7 @@ public class FoodService {
         this.foodRepository = foodRepository;
     }
 
-    public FoodResponse create(FoodCreateDto payload) {
+    public FoodCreateResponse create(FoodCreateDto payload) {
         if (!foodRepository.exists(payload.name(), payload.proportion())) {
             var foodToPersist = mapToFood(payload);
             foodRepository.create(foodToPersist);
@@ -30,11 +30,11 @@ public class FoodService {
         return new Food(dto.name(), dto.proportion(), dto.price());
     }
 
-    private FoodResponse mapToFoodResponse(Food food) {
-        return new FoodResponse(food.getId(), food.getName(), food.getProportion(), food.getPrice());
+    private FoodCreateResponse mapToFoodResponse(Food food) {
+        return new FoodCreateResponse(food.getId(), food.getName(), food.getProportion(), food.getPrice());
     }
 
-    public FoodResponse changePrice(Long foodId, PriceUpdateRequest payload) {
+    public FoodCreateResponse changePrice(Long foodId, PriceUpdateRequest payload) {
         var updatedFood = foodRepository.updatePrice(foodId, payload.price());
         return mapToFoodResponse(updatedFood);
     }

@@ -23,9 +23,10 @@ public class FoodResource {
 
     @POST
     public Response create(@Valid FoodCreateDto payload) {
-        var response = service.create(payload);
-        return Response.created(URI.create("/api/v1/foods"))
-                .entity(response)
+        var foodResponse = service.create(payload);
+        URI locationUri = URI.create("/api/v1/foods/" + foodResponse.id());
+        return Response.created(locationUri)
+                .entity(foodResponse)
                 .build();
     }
 

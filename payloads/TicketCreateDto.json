@@ -1,0 +1,17 @@
+{
+	"waiterId": 1,
+	"orders": [
+		{
+			"foodId": 1,
+			"quantity": 1
+		},
+		{
+			"foodId": 2,
+			"quantity": 1
+		},
+		{
+			"foodId": 3,
+			"quantity": 1
+		}
+	]
+}
