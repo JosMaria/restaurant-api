@@ -1,9 +1,11 @@
 package org.lievasoft.resource;
 
+import jakarta.validation.Valid;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
 import org.lievasoft.dto.WaiterCreateDto;
+import org.lievasoft.dto.WaiterCreateResponse;
 import org.lievasoft.service.WaiterService;
 
 import java.net.URI;
@@ -18,10 +20,11 @@ public class WaiterResource {
     }
 
     @POST
-    public Response create(WaiterCreateDto payload) {
-        var response = service.create(payload);
-        return Response.created(URI.create("/api/v1/waiters"))
-                .entity(response)
+    public Response create(@Valid WaiterCreateDto payload) {
+        var waiterCreateResponse = service.create(payload);
+        var uri = URI.create("/api/v1/waiters/" + waiterCreateResponse.id());
+        return Response.created(uri)
+                .entity(waiterCreateResponse)
                 .build();
     }
 }
