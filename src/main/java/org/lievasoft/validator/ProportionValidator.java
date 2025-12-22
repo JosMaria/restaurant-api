@@ -9,7 +9,7 @@ import java.util.Arrays;
 public class ProportionValidator implements ConstraintValidator<ValidProportion, Proportion> {
 
     @Override
-    public boolean isValid(Proportion proportion, ConstraintValidatorContext constraintValidatorContext) {
+    public boolean isValid(Proportion proportion, ConstraintValidatorContext context) {
         return Arrays.asList(Proportion.values()).contains(proportion);
     }
 }

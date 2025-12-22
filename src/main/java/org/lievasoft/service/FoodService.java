@@ -26,16 +26,16 @@ public class FoodService {
         } else throw new FoodExistsException(payload.name(), payload.proportion());
     }
 
+    public FoodCreateResponse changePrice(String foodId, PriceUpdateRequest payload) {
+        var updatedFood = foodRepository.updatePrice(foodId, payload.price());
+        return mapToFoodResponse(updatedFood);
+    }
+
     private Food mapToFood(FoodCreateDto dto) {
         return new Food(dto.name(), dto.proportion(), dto.price());
     }
 
     private FoodCreateResponse mapToFoodResponse(Food food) {
         return new FoodCreateResponse(food.getId(), food.getName(), food.getProportion(), food.getPrice());
-    }
-
-    public FoodCreateResponse changePrice(Long foodId, PriceUpdateRequest payload) {
-        var updatedFood = foodRepository.updatePrice(foodId, payload.price());
-        return mapToFoodResponse(updatedFood);
     }
 }

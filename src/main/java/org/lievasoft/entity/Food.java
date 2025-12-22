@@ -1,14 +1,7 @@
 package org.lievasoft.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
+import org.hibernate.annotations.UuidGenerator;
 import org.lievasoft.enums.Proportion;
 
 @Entity
@@ -19,8 +12,8 @@ import org.lievasoft.enums.Proportion;
 public class Food {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @UuidGenerator
+    private String id;
 
     @Column(nullable = false, length = 50)
     private String name;
@@ -40,7 +33,7 @@ public class Food {
         this.price = price;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 

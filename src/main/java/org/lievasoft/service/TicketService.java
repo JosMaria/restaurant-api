@@ -29,28 +29,27 @@ public class TicketService {
 //    private final CounterService counterService;
 
     public TicketCreateResponse registerTicket(TicketCreateDto payload) {
-        var orderCreateDtos = payload.orders();
-        if (orderCreateDtos.isEmpty())
-            throw new IllegalArgumentException("Orders empty nothing for save.");
-
-        boolean waiterExists = waiterRepository.exists(payload.waiterId());
-        if (waiterExists) {
-            boolean foodExists;
-            for (var orderCreateDto : orderCreateDtos) {
-                foodExists = foodRepository.exists(orderCreateDto.foodId());
-                if (!foodExists) {
-                    String errorMsg = "Food not found for ID: %s".formatted(orderCreateDto.foodId());
-                    throw new EntityNotFoundException(errorMsg);
-                }
-            }
-
-            try {
-                ticketServiceClient.createTicket(payload);
-            } catch (Exception exception) {
-                System.out.println(exception.getMessage());
-            }
-        }
-
+//        var orderCreateDtos = payload.orders();
+//        if (orderCreateDtos.isEmpty())
+//            throw new IllegalArgumentException("Orders empty nothing for save.");
+//
+//        boolean waiterExists = waiterRepository.exists(payload.waiterId());
+//        if (waiterExists) {
+//            boolean foodExists;
+//            for (var orderCreateDto : orderCreateDtos) {
+//                foodExists = foodRepository.exists(orderCreateDto.foodId());
+//                if (!foodExists) {
+//                    String errorMsg = "Food not found for ID: %s".formatted(orderCreateDto.foodId());
+//                    throw new EntityNotFoundException(errorMsg);
+//                }
+//            }
+//
+//            try {
+//                ticketServiceClient.createTicket(payload);
+//            } catch (Exception exception) {
+//                System.out.println(exception.getMessage());
+//            }
+//        }
 //        List<Order> ordersToPersist = new ArrayList<>();
 //        payload.orders().forEach(orderCreateDto -> {
 //            var obtainedFood = obtainFoodOrElseThrow(orderCreateDto.foodId());

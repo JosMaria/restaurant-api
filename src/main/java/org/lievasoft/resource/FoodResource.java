@@ -32,7 +32,7 @@ public class FoodResource {
 
     @PATCH
     @Path("/{id}/price")
-    public Response updatePrice(@PathParam("id") Long foodId, @Valid PriceUpdateRequest payload) {
+    public Response updatePrice(@PathParam("id") String foodId, @Valid PriceUpdateRequest payload) {
         var response = service.changePrice(foodId, payload);
         return Response.ok(response).build();
     }
