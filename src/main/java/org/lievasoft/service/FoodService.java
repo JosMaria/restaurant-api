@@ -1,12 +1,13 @@
 package org.lievasoft.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import org.lievasoft.dto.FoodCreateDto;
-import org.lievasoft.dto.FoodCreateResponse;
-import org.lievasoft.dto.PriceUpdateRequest;
+import org.lievasoft.resource.dto.food.FoodCreateDto;
+import org.lievasoft.resource.dto.food.FoodCreateResponse;
+import org.lievasoft.resource.dto.food.PriceUpdateRequest;
 import org.lievasoft.entity.Food;
 import org.lievasoft.exception.FoodExistsException;
 import org.lievasoft.repository.FoodRepository;
+import org.lievasoft.resource.dto.food.PriceUpdateResponse;
 
 @ApplicationScoped
 public class FoodService {
@@ -26,9 +27,9 @@ public class FoodService {
         } else throw new FoodExistsException(payload.name(), payload.proportion());
     }
 
-    public FoodCreateResponse changePrice(String foodId, PriceUpdateRequest payload) {
+    public PriceUpdateResponse changePrice(String foodId, PriceUpdateRequest payload) {
         var updatedFood = foodRepository.updatePrice(foodId, payload.price());
-        return mapToFoodResponse(updatedFood);
+        return mapToPriceUpdateResponse(updatedFood);
     }
 
     private Food mapToFood(FoodCreateDto dto) {
@@ -37,5 +38,9 @@ public class FoodService {
 
     private FoodCreateResponse mapToFoodResponse(Food food) {
         return new FoodCreateResponse(food.getId(), food.getName(), food.getProportion(), food.getPrice());
+    }
+
+    private PriceUpdateResponse mapToPriceUpdateResponse(Food food) {
+        return new PriceUpdateResponse(food.getId(), food.getPrice());
     }
 }

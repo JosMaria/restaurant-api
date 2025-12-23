@@ -1,4 +1,4 @@
-package org.lievasoft.dto;
+package org.lievasoft.resource.dto.food;
 
 import jakarta.validation.constraints.NotBlank;
 import org.lievasoft.enums.Proportion;
@@ -14,4 +14,3 @@ public record FoodCreateDto(
         double price
 ) {
 }
-

@@ -1,7 +1,6 @@
 package org.lievasoft.repository;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
-import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import org.lievasoft.entity.Food;
@@ -24,17 +23,13 @@ public class FoodRepository implements PanacheRepositoryBase<Food, String> {
         this.persist(food);
     }
 
-    public boolean exists(String id) {
-        return find("id = :id", with("id", id)).count() > 0;
-    }
-
     @Transactional
     public Food updatePrice(String foodId, double price) {
-        int updateRows = update("price = :price WHERE id = :id",
-                with("price", price).and("id", foodId));
+        var conditional = "price = :price WHERE id = :id";
+        var parameters = with("price", price).and("id", foodId);
+        int updateRows = update(conditional, parameters);
 
         if (updateRows == 0) throw new FoodNotFoundException(foodId);
-
-        return findById(foodId);
+        else return findById(foodId);
     }
 }

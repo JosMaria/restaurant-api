@@ -1,4 +1,4 @@
-package org.lievasoft.dto;
+package org.lievasoft.resource.dto.food;
 
 import org.lievasoft.enums.Proportion;
 
