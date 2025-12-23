@@ -3,11 +3,33 @@ package org.lievasoft.entity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.UuidGenerator;
 import org.lievasoft.enums.Proportion;
+import org.lievasoft.resource.dto.food.PriceUpdateResponse;
 
 @Entity
 @Table(
         name = "foods",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "proportion"})}
+)
+@NamedNativeQuery(
+        name = "Food.findPrice",
+        query = """
+                    SELECT id, price, name, proportion
+                    FROM foods
+                    WHERE id = :foodId
+                """,
+        resultSetMapping = "FoodPriceMapping"
+)
+@SqlResultSetMapping(
+        name = "FoodPriceMapping",
+        classes = @ConstructorResult(
+                targetClass = PriceUpdateResponse.class,
+                columns = {
+                        @ColumnResult(name = "id", type = String.class),
+                        @ColumnResult(name = "price", type = Double.class),
+                        @ColumnResult(name = "name", type = String.class),
+                        @ColumnResult(name = "proportion", type = Proportion.class)
+                }
+        )
 )
 public class Food {
 

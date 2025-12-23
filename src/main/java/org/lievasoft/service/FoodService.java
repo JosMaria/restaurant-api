@@ -30,7 +30,6 @@ public class FoodService {
     }
 
     public PriceUpdateResponse changePrice(String foodId, PriceUpdateRequest payload) {
-        var updatedFood = foodRepository.updatePrice(foodId, payload.price());
-        return foodMapper.toPriceUpdateResponse(updatedFood);
+        return foodRepository.updatePrice(foodId, payload.price());
     }
 }
