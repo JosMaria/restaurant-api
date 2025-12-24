@@ -1,8 +1,8 @@
 package org.lievasoft.repository;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
+import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.persistence.Parameter;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import org.lievasoft.entity.Food;
@@ -40,5 +40,11 @@ public class FoodRepository implements PanacheRepositoryBase<Food, String> {
         Query namedQuery = getEntityManager().createNamedQuery("Food.findPrice");
         namedQuery.setParameter("foodId", foodId);
         return (PriceUpdateResponse) namedQuery.getSingleResult();
+    }
+
+    public boolean exists(String foodId) {
+        String conditional = "id = :foodId";
+        var parameters = with("foodId", foodId);
+        return find(conditional, parameters).count() > 0;
     }
 }

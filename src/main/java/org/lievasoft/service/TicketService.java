@@ -1,11 +1,12 @@
 package org.lievasoft.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.persistence.EntityNotFoundException;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.lievasoft.dto.TicketCreateDto;
 import org.lievasoft.dto.TicketCreateResponse;
 import org.lievasoft.entity.Waiter;
+import org.lievasoft.exception.FoodNotFoundException;
+import org.lievasoft.exception.WaiterNotFoundException;
 import org.lievasoft.repository.FoodRepository;
 import org.lievasoft.repository.WaiterRepository;
 
@@ -23,18 +24,21 @@ public class TicketService {
         this.waiterRepository = waiterRepository;
         this.foodRepository = foodRepository;
     }
-//    private final FoodRepository foodRepository;
-//    private final TicketRepository ticketRepository;
-//    private final TicketProducer ticketProducer;
-//    private final CounterService counterService;
 
     public TicketCreateResponse registerTicket(TicketCreateDto payload) {
-//        var orderCreateDtos = payload.orders();
-//        if (orderCreateDtos.isEmpty())
-//            throw new IllegalArgumentException("Orders empty nothing for save.");
-//
-//        boolean waiterExists = waiterRepository.exists(payload.waiterId());
-//        if (waiterExists) {
+        String waiterId = payload.waiterId();
+        boolean waiterExists = waiterRepository.exists(waiterId);
+        if (waiterExists) {
+            var ordersToConvert = payload.orders();
+            for (var orderCreateDto : ordersToConvert) {
+                var foodId = orderCreateDto.foodId();
+                boolean exists = foodRepository.exists(foodId);
+                if (!exists) throw new FoodNotFoundException(foodId);
+            }
+            return ticketServiceClient.createTicket(payload);
+
+        } else throw new WaiterNotFoundException(waiterId);
+    }
 //            boolean foodExists;
 //            for (var orderCreateDto : orderCreateDtos) {
 //                foodExists = foodRepository.exists(orderCreateDto.foodId());
@@ -49,7 +53,6 @@ public class TicketService {
 //            } catch (Exception exception) {
 //                System.out.println(exception.getMessage());
 //            }
-//        }
 //        List<Order> ordersToPersist = new ArrayList<>();
 //        payload.orders().forEach(orderCreateDto -> {
 //            var obtainedFood = obtainFoodOrElseThrow(orderCreateDto.foodId());
@@ -63,8 +66,6 @@ public class TicketService {
 //        ticketToPersist.addOrders(ordersToPersist);
 //        ticketRepository.create(ticketToPersist);
 //        counterService.incrementTicket();
-        return null;
-    }
 
 //    public void changeIsPaid(long id, boolean isPaid) {
 //        ticketRepository.updateIsPaid(id, isPaid);

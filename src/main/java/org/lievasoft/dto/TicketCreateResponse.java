@@ -1,4 +1,4 @@
 package org.lievasoft.dto;
 
-public class TicketCreateResponse {
+public record TicketCreateResponse(){
 }

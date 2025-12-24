@@ -1,4 +1,4 @@
-package org.lievasoft.validator;
+package org.lievasoft.resource.validator;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

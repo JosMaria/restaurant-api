@@ -19,4 +19,9 @@ public class WaiterRepository implements PanacheRepositoryBase<Waiter, String> {
         var parameters = with("number", phoneNumber);
         return find("phoneNumber = :number", parameters).count() > 0;
     }
+
+    public boolean exists(String waiterId) {
+        var parameters = with("id", waiterId);
+        return find("id = :id", parameters).count() > 0;
+    }
 }
