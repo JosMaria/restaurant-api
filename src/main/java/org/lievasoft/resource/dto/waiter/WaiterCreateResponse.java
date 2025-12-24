@@ -1,7 +1,7 @@
-package org.lievasoft.dto;
+package org.lievasoft.resource.dto.waiter;
 
 public record WaiterCreateResponse(
-        Long id,
+        String id,
         String name,
         String lastname,
         String phoneNumber

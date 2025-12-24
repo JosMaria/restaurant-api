@@ -4,8 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
-import org.lievasoft.dto.WaiterCreateDto;
-import org.lievasoft.dto.WaiterCreateResponse;
+import org.lievasoft.resource.dto.waiter.WaiterCreateDto;
 import org.lievasoft.service.WaiterService;
 
 import java.net.URI;

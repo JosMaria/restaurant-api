@@ -71,12 +71,12 @@ public class TicketService {
 //    }
 
     private Waiter obtainWaiterOrElseThrow(long waiterId) {
-
-        return waiterRepository.findByIdOptional(waiterId)
-                .orElseThrow(() -> {
-                    String errorMsg = "Waiter with Id: %s does not exists.".formatted(waiterId);
-                    return new EntityNotFoundException(errorMsg);
-                });
+        return null;
+//        return waiterRepository.findByIdOptional(waiterId)
+//                .orElseThrow(() -> {
+//                    String errorMsg = "Waiter with Id: %s does not exists.".formatted(waiterId);
+//                    return new EntityNotFoundException(errorMsg);
+//                });
     }
 //
 //    private Food obtainFoodOrElseThrow(long foodId) {
