@@ -1,12 +1,13 @@
 package org.lievasoft.resource;
 
+import jakarta.validation.Valid;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Response;
-import org.lievasoft.dto.FoodCreateDto;
-import org.lievasoft.dto.PriceUpdateRequest;
+import org.lievasoft.resource.dto.food.FoodCreateDto;
+import org.lievasoft.resource.dto.food.PriceUpdateRequest;
 import org.lievasoft.service.FoodService;
 
 import java.net.URI;
@@ -21,17 +22,18 @@ public class FoodResource {
     }
 
     @POST
-    public Response create(FoodCreateDto payload) {
-        var response = service.create(payload);
-        return Response.created(URI.create("/api/v1/foods"))
-                .entity(response)
+    public Response create(@Valid FoodCreateDto payload) {
+        var foodCreateResponse = service.create(payload);
+        var uri = URI.create("/api/v1/foods/" + foodCreateResponse.id());
+        return Response.created(uri)
+                .entity(foodCreateResponse)
                 .build();
     }
 
     @PATCH
     @Path("/{id}/price")
-    public Response updatePrice(@PathParam("id") Long foodId, PriceUpdateRequest payload) {
-        var response = service.changePrice(foodId, payload);
-        return Response.ok(response).build();
+    public Response updatePrice(@PathParam("id") String foodId, @Valid PriceUpdateRequest payload) {
+        var priceUpdateResponse = service.changePrice(foodId, payload);
+        return Response.ok(priceUpdateResponse).build();
     }
 }

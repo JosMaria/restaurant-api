@@ -1,44 +1,34 @@
 package org.lievasoft.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.persistence.EntityExistsException;
-import org.lievasoft.dto.WaiterCreateDto;
-import org.lievasoft.dto.WaiterResponse;
-import org.lievasoft.entity.Waiter;
 import org.lievasoft.exception.PhoneNumberExistsException;
+import org.lievasoft.mapper.WaiterMapper;
 import org.lievasoft.repository.WaiterRepository;
+import org.lievasoft.resource.dto.waiter.WaiterCreateDto;
+import org.lievasoft.resource.dto.waiter.WaiterCreateResponse;
+
+import java.util.Objects;
 
 @ApplicationScoped
 public class WaiterService {
 
     private final WaiterRepository waiterRepository;
+    private final WaiterMapper waiterMapper;
 
-    public WaiterService(WaiterRepository waiterRepository) {
+    public WaiterService(WaiterRepository waiterRepository, WaiterMapper waiterMapper) {
         this.waiterRepository = waiterRepository;
+        this.waiterMapper = waiterMapper;
     }
 
-    public WaiterResponse create(WaiterCreateDto payload) {
+    public WaiterCreateResponse create(WaiterCreateDto payload) {
         var phoneNumber = payload.phoneNumber();
-        var isRegistered = waiterRepository.isRegisteredNumber(phoneNumber);
+        if (Objects.nonNull(phoneNumber)) {
+            var isRegistered = waiterRepository.isRegisteredNumber(phoneNumber);
+            if (isRegistered) throw new PhoneNumberExistsException(phoneNumber);
+        }
 
-        if (!isRegistered) {
-            var waiterToPersist = mapToWaiter(payload);
-            waiterRepository.create(waiterToPersist);
-            return mapToWaiterResponse(waiterToPersist);
-
-        } else throw new PhoneNumberExistsException(phoneNumber);
-    }
-
-    private Waiter mapToWaiter(WaiterCreateDto payload) {
-        return new Waiter(payload.name(), payload.lastname(), payload.phoneNumber());
-    }
-
-    private WaiterResponse mapToWaiterResponse(Waiter waiter) {
-        return new WaiterResponse(
-                waiter.getId(),
-                waiter.getName(),
-                waiter.getLastname(),
-                waiter.getPhoneNumber()
-        );
+        var waiterToPersist = waiterMapper.toEntity(payload);
+        waiterRepository.create(waiterToPersist);
+        return waiterMapper.toWaiterResponse(waiterToPersist);
     }
 }

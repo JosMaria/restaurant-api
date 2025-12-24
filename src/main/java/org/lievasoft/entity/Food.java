@@ -1,17 +1,41 @@
 package org.lievasoft.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.UuidGenerator;
 import org.lievasoft.enums.Proportion;
-
-import java.util.Set;
+import org.lievasoft.resource.dto.food.PriceUpdateResponse;
 
 @Entity
-@Table(name = "foods", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "proportion"})})
+@Table(
+        name = "foods",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "proportion"})}
+)
+@NamedNativeQuery(
+        name = "Food.findPrice",
+        query = """
+                    SELECT id, price, name, proportion
+                    FROM foods
+                    WHERE id = :foodId
+                """,
+        resultSetMapping = "FoodPriceMapping"
+)
+@SqlResultSetMapping(
+        name = "FoodPriceMapping",
+        classes = @ConstructorResult(
+                targetClass = PriceUpdateResponse.class,
+                columns = {
+                        @ColumnResult(name = "id", type = String.class),
+                        @ColumnResult(name = "price", type = Double.class),
+                        @ColumnResult(name = "name", type = String.class),
+                        @ColumnResult(name = "proportion", type = Proportion.class)
+                }
+        )
+)
 public class Food {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @UuidGenerator
+    private String id;
 
     @Column(nullable = false, length = 50)
     private String name;
@@ -22,10 +46,8 @@ public class Food {
 
     private Double price;
 
-    @OneToMany(mappedBy = "food")
-    private Set<Order> orders;
-
-    public Food() {}
+    public Food() {
+    }
 
     public Food(String name, Proportion proportion, double price) {
         this.name = name;
@@ -33,7 +55,7 @@ public class Food {
         this.price = price;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -47,9 +69,5 @@ public class Food {
 
     public Double getPrice() {
         return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
     }
 }

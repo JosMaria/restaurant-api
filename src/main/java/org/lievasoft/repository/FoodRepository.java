@@ -1,16 +1,25 @@
 package org.lievasoft.repository;
 
-import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.Parameter;
+import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import org.lievasoft.entity.Food;
 import org.lievasoft.enums.Proportion;
+import org.lievasoft.exception.FoodNotFoundException;
+import org.lievasoft.resource.dto.food.PriceUpdateResponse;
 
 import static io.quarkus.panache.common.Parameters.with;
 
 @ApplicationScoped
-public class FoodRepository implements PanacheRepository<Food> {
+public class FoodRepository implements PanacheRepositoryBase<Food, String> {
+
+    public boolean exists(String name, Proportion proportion) {
+        var conditional = "name = :name AND proportion = :proportion";
+        var parameters = with("name", name).and("proportion", proportion);
+        return find(conditional, parameters).count() > 0;
+    }
 
     @Transactional
     public void create(Food food) {
@@ -18,20 +27,18 @@ public class FoodRepository implements PanacheRepository<Food> {
     }
 
     @Transactional
-    public Food updatePrice(long foodId, double price) {
-        int updateRows = update("price = :price WHERE id = :id",
-                with("price", price).and("id", foodId));
+    public PriceUpdateResponse updatePrice(String foodId, double price) {
+        var conditional = "price = :price WHERE id = :id";
+        var parameters = with("price", price).and("id", foodId);
+        int updateRows = update(conditional, parameters);
 
-        if (updateRows == 0)
-            throw new EntityNotFoundException("Food with id " + foodId + " not found");
-
-        return findById(foodId);
+        if (updateRows == 0) throw new FoodNotFoundException(foodId);
+        else return findPriceById(foodId);
     }
 
-    public boolean exists(String name, Proportion proportion) {
-        return find(
-                "name = :name AND proportion = :proportion",
-                with("name", name).and("proportion", proportion)
-        ).count() > 0;
+    public PriceUpdateResponse findPriceById(String foodId) {
+        Query namedQuery = getEntityManager().createNamedQuery("Food.findPrice");
+        namedQuery.setParameter("foodId", foodId);
+        return (PriceUpdateResponse) namedQuery.getSingleResult();
     }
 }
